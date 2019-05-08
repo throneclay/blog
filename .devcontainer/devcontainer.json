@@ -1,7 +1,7 @@
 {
     "name": "Hexo blog",
     "dockerFile": "Dockerfile",
-    "appPort": 8000,
+    "appPort": 4000,
     "extensions": [
         "markdown-preview-enhanced"
     ]
