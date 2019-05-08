@@ -3,6 +3,6 @@
     "dockerFile": "Dockerfile",
     "appPort": 4000,
     "extensions": [
-        "markdown-preview-enhanced"
-    ]
+    ],
+    "postCreateCommand": "npm install; npm audit fix"
 }
