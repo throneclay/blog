@@ -1,7 +1,7 @@
 title: bandwagonhost搬瓦工搭建ipv6+shadowsocks
 date: 2015-07-05 15:46:36
 categories: 学习笔记
-tags:
+tags: shadowsocks
 plink: bwg
 mathjax: true
 ---
