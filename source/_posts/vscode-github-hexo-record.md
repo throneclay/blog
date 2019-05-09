@@ -30,7 +30,9 @@ git clone https://github.com/Microsoft/vscode-remote-try-php
 git clone https://github.com/Microsoft/vscode-remote-try-rust
 git clone https://github.com/Microsoft/vscode-remote-try-cpp
 ```
-跟我们相关的是在自己的```hexo init```的文件夹下创建一个文件夹```.devcontainer```，这个文件夹下描述了docker相关的一些配置文件，最重要的有```Dockerfile```和```devcontainer.json```，```devcontainer.json```文件里面记录了这个项目的docker名字，开放的端口，需要的vscode的插件等等，这里给出我的hexo的配置供参考
+
+跟我们相关的是在自己的hexo的文件夹下创建一个新的文件夹.devcontainer，这个文件夹下描述了docker相关的一些配置文件，最重要的有Dockerfile和devcontainer.json，devcontainer.json文件里面记录了这个项目的docker名字，开放的端口，需要的vscode的插件等等，这里给出我的devcontainer.json文件内容配置供参考：
+
 ```
 {
     "name": "Hexo blog",
@@ -118,9 +120,9 @@ github免费为所有用户提供了一种host自己静态网页的方式，repo
 配置自己的dns，将分过去的域名使用CNAME类型指向[username].github.io就可以了，你也可以使用A类型，IP你可以ping [username].github.io得到。两种方法都可以。
 
 
-#### repo的gp-pages中自定义域名
+#### repo的gh-pages中自定义域名
 
-这个比较trick，不过也解出来了，还是使用CNAME文件，放在```gp-pages```分支下的文件的以及目录即可。CNAME的文件内容就一行，直接写你的域名或者分给这个网址的域名。CNAME文件放在source/下，就可以自动在generate的时候放到public文件夹下。
+这个比较trick，不过也解出来了，还是使用CNAME文件，放在```gh-pages```分支下的文件的以及目录即可。CNAME的文件内容就一行，直接写你的域名或者分给这个网址的域名。CNAME文件放在source/下，就可以自动在generate的时候放到public文件夹下。
 
 配置自己的dns，你可以使用A类型，IP你可以ping [username].github.io得到。这种方法亲测有效。
 
