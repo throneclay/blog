@@ -19,7 +19,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://blog.throneclay.com
+url: http://blog.throneclay.top
 root: /
 permalink: :year/:month/:day/:plink/
 permalink_defaults:
