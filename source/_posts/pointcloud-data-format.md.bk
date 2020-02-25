@@ -11,12 +11,9 @@ plink: pc_data_format
 
 # KITTI
 
+kitti的数据格式清晰也简单，用起来比较方便
 
 # Nuscene & Lyft
-
-
-
-# Waymo
 
 
 
