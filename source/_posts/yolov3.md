@@ -1,7 +1,7 @@
 ---
-title: yolov3论文详解理论篇
+title: yolov3论文详解--我们究竟在训练什么
 mathjax: true
-date: 2020-2-10 03:45:23
+date: 2020-2-19 03:45:23
 categories: 深度学习
 tags: yolo
 plink: yolo-learning
@@ -16,6 +16,7 @@ plink: yolo-learning
 ### 模型思想
 
 yolo的核心思想是将物体检测问题转化成回归问题进行求解。最终的输出通过使用不同channel来进行区分，不同channel的信息经过特定的处理得到的物体位置，类别等信息。由于不需要proposal过程对候选框进行计算，yolo的速度可以说是非常快的，而且全网络都是由convolution操作构成，计算效率很高，对于图像尺寸的兼容性非常好。
+![](/images/20200306161204.jpg)
 
 ### 模型结构
 
@@ -23,17 +24,13 @@ yolo的核心思想是将物体检测问题转化成回归问题进行求解。�
 
 #### backbone
 
-backbone是用的自己设计的darknet网络。
+backbone是用的自己设计的darknet网络。在yolov2的时候使用的是darknet19，而在yolov3的时候已经升级到darknet53了。
+![](/images/20200306161314.jpg)
 
 #### head
 
 head部分采用回归的方法直接得出物体的位置和尺寸。计算的层也直接使用了convolution层来进行计算，简单粗暴效果还很好。
-
-
-### detection header
-
-
-
-### 总结
+![](/images/20200306161902.jpg)
+## 总结
 
 论文地址是 https://pjreddie.com/media/files/papers/YOLOv3.pdf
