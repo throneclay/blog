@@ -16,21 +16,35 @@ plink: yolo-learning
 ### 模型思想
 
 yolo的核心思想是将物体检测问题转化成回归问题进行求解。最终的输出通过使用不同channel来进行区分，不同channel的信息经过特定的处理得到的物体位置，类别等信息。由于不需要proposal过程对候选框进行计算，yolo的速度可以说是非常快的，而且全网络都是由convolution操作构成，计算效率很高，对于图像尺寸的兼容性非常好。
+
+yolov3的基本思想跟v2保持一致，依旧还是将图像分成若干cell，**如果目标的中心点位于此cell中，那么这个cell负责输出目标的各个属性（包括中心点位置，宽度和高度，confidence以及type信息）**。
+
+这里说一个cell指的是输入图片的划分，前面的cell随着网络计算产生的下采样效果就变成了一个值。也就是说**输出的尺寸大小就代表了输入图像究竟划分成多少cell**。
+
+yolov3有三组不同的cell划分。分别是13x13, 26x26和52x52。cell越多说明划分的越细，对于小物体的识别就越好。
+
 ![](/images/20200306161204.jpg)
 
 ### 模型结构
 
-模型结构按照backbone和head来说，backbone就是特征提取网络，head部分就是针对检测的部分网络。
+模型结构按照backbone和head来说，backbone就是特征提取网络，head部分就是针对检测的部分网络。 存了一下网络结构，感兴趣的可以看一下，结构太长就不直接展示了[yolov3.png](/images/yolov3.png)
 
 #### backbone
 
-backbone是用的自己设计的darknet网络。在yolov2的时候使用的是darknet19，而在yolov3的时候已经升级到darknet53了。
+backbone是用的自己设计的darknet网络。在yolov2的时候使用的是darknet19，而在yolov3的时候已经升级到darknet53了（有53层convolution）。
+
+backbone评估的方法基本还是看对分类问题的准确性来确定的。结果就不贴了，作者展示的效果上darknet-53的效果同resnet-152大致相同，但速度快了一倍。
+
 ![](/images/20200306161314.jpg)
 
 #### head
 
 head部分采用回归的方法直接得出物体的位置和尺寸。计算的层也直接使用了convolution层来进行计算，简单粗暴效果还很好。
+
+head中score的计算没有使用softmax，而是用的
+
 ![](/images/20200306161902.jpg)
+
 ## 总结
 
 论文地址是 https://pjreddie.com/media/files/papers/YOLOv3.pdf
