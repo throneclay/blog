@@ -25,7 +25,7 @@ yolov3有三组不同的cell划分。分别是13x13, 26x26和52x52。cell越多�
 
 ![](/images/20200306161204.jpg)
 
-### 模型结构
+### 模型结构及yolov3网络结构图
 
 模型结构按照backbone和head来说，backbone就是特征提取网络，head部分就是针对检测的部分网络。 存了一下网络结构，感兴趣的可以看一下，结构太长就不直接展示了[yolov3.png](/images/yolov3.png)
 
