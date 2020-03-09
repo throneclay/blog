@@ -7,7 +7,9 @@ tags: yolo
 plink: yolo-learning
 ---
 
-就在写这篇文章的时候，yolo作者Joseph Redmon宣布停止CV研究，很可能yolov3将成为yolo系列的终局。想到这个感觉还是要好好写一下yolo啊。本来只想写一篇来介绍一下yolov3并记录下我是如何用到自己数据集上，写完后发现篇幅很长，遂拆成两部分，此篇为理论部分，实战部分见。
+就在写这篇文章的时候，yolo作者Joseph Redmon宣布停止CV研究，很可能yolov3将成为yolo系列的终局。想到这个感觉还是要好好写一下yolo啊。本来只想写一篇来介绍一下yolov3并记录下我是如何用到自己数据集上，写完后发现篇幅很长，遂拆成两部分。 
+
+此篇为理论部分，实战部分见[http://localhost:4000/2020/03/05/yolo-learning2/](http://localhost:4000/2020/03/05/yolo-learning2/)。
 
 因为工作原因，需要找一个准确率还不错，而且推理速度较低的网络完成目标检测的能力，马上就想起来yolov3了。说来惭愧的是yolov3出来已经有些时间了，但却一直没有认真阅读。趁这次机会，翻出存放已久的yolo的论文，结合生成的自己的数据好好实践了一把。darknet的这个backbone效果还是非常好的，而且很快我就得到了想要的模型。
 
@@ -27,24 +29,29 @@ yolov3有三组不同的cell划分。分别是13x13, 26x26和52x52。cell越多�
 
 ### 模型结构及yolov3网络结构图
 
-模型结构按照backbone和head来说，backbone就是特征提取网络，head部分就是针对检测的部分网络。 存了一下网络结构，感兴趣的可以看一下，结构太长就不直接展示了[yolov3.png](/images/yolov3.png)
+模型结构按照backbone和head来说，backbone就是特征提取网络，head部分就是针对检测的部分网络。 存了一下网络结构，结构太长就不直接展示了，感兴趣的可以看一下[yolov3结构图](/images/yolov3.png)
 
 #### backbone
 
 backbone是用的自己设计的darknet网络。在yolov2的时候使用的是darknet19，而在yolov3的时候已经升级到darknet53了（有53层convolution）。
 
-backbone评估的方法基本还是看对分类问题的准确性来确定的。结果就不贴了，作者展示的效果上darknet-53的效果同resnet-152大致相同，但速度快了一倍。
+backbone评估的方法基本还是看对分类问题的准确性来确定的。结果就不贴了，作者展示的效果上darknet-53的效果同resnet-152大致相同，但速度快了一倍。其实darknet-53已经采用了类似resnet的结构，随着residual结构的引入，训练效果得到了很大的提升。
 
-![](/images/20200306161314.jpg)
+![](/images/20200309094623.jpg)
 
 #### head
 
 head部分采用回归的方法直接得出物体的位置和尺寸。计算的层也直接使用了convolution层来进行计算，简单粗暴效果还很好。
 
-head中score的计算没有使用softmax，而是用的
+head中score的计算没有使用softmax，而是用的sigmoid，提供了一个cell同时给出多种类别的可能。三组的最后一层都是conv，其H，W就是cell的编号，channel方向上给出希望得到的数据。具体如下
 
 ![](/images/20200306161902.jpg)
 
+
+
+
 ## 总结
+
+yolov3通过设计3组不同尺寸的anchor来增强对小物体的检测，用更鲁棒的backbone来升级特征提取。整体思路非常清晰，论文写的偏口语化，阅读起来难度不大。写完发现还有很多地方可以展开介绍，后面会不定期更新。
 
 论文地址是 https://pjreddie.com/media/files/papers/YOLOv3.pdf
