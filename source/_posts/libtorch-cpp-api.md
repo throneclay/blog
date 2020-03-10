@@ -13,8 +13,8 @@ plink: libtorch_cpp
 
 下载libtorch的地方会有两种包。。看名字完全不知道要怎么选，测了一把，应该是按照下面逻辑去选。后面再来补充原因。
 
-libtorch-cxx11-abi-shared-with-deps-1.3.1.zip -> gcc >= 5.4
-libtorch-shared-with-deps-1.3.1.zip  gcc < 5.4
+libtorch-cxx11-abi-shared-with-deps-1.3.1.zip =====> gcc >= 5.4
+libtorch-shared-with-deps-1.3.1.zip =====> gcc < 5.4
 
 ## libtorch的编译方法
 
