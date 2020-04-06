@@ -9,7 +9,7 @@ plink: yolo-learning
 
 就在写这篇文章的时候，yolo作者Joseph Redmon宣布停止CV研究，很可能yolov3将成为yolo系列的终局。想到这个感觉还是要好好写一下yolo啊。本来只想写一篇来介绍一下yolov3并记录下我是如何用到自己数据集上，写完后发现篇幅很长，遂拆成两部分。 
 
-此篇为理论部分，实战部分见[http://localhost:4000/2020/03/05/yolo-learning2/](http://localhost:4000/2020/03/05/yolo-learning2/)。
+此篇为理论部分，实战部分见[http://blog.throneclay.top/2020/03/05/yolo-learning2/](http://blog.throneclay.top/2020/03/05/yolo-learning2/)。
 
 因为工作原因，需要找一个准确率还不错，而且推理速度较低的网络完成目标检测的能力，马上就想起来yolov3了。说来惭愧的是yolov3出来已经有些时间了，但却一直没有认真阅读。趁这次机会，翻出存放已久的yolo的论文，结合生成的自己的数据好好实践了一把。darknet的这个backbone效果还是非常好的，而且很快我就得到了想要的模型。
 
