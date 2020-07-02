@@ -53,7 +53,7 @@ type 的取值可以是以下几种:
 **type = compact**
 就如compact的意思一样,线程会先充分利用第一个核,当第一个核上所有硬件线程都被分配后,再充分分配到第二个核,依次类推下去.例如有6核12线程的处理器,分配7个线程,前3个核各获得2个线程,最后一个线程被分配到第四个核,最后两个核没有用到.给一张Intel给的图例:
 
-![](http://7xnn25.com1.z0.glb.clouddn.com/intelopenmp10_9_1.jpg_s.jpg)
+![](http://qn.throneclay.top/intelopenmp10_9_1.jpg_s.jpg)
 
 Intel给的图例给出了完整的映射逻辑,在内部映射时, 就是采用这种方式,compact方式会得到这样的一棵树, 递归填满左子树,直到所有线程分配完毕.图中package是封装的意思,就是你有几个独立的CPU.
 
@@ -66,7 +66,7 @@ Intel给的图例给出了完整的映射逻辑,在内部映射时, 就是采用
 **type = scatter**
 采用scatter方式,线程会被尽可能平均分配.例如一个6核12线程的处理器,分配7个线程, 6个核上先各获得一个线程,再把最后一个线程分配给第一个核.Intel给的图例:
 
-![](http://7xnn25.com1.z0.glb.clouddn.com/intelopenmp10_9_2.jpg_s.jpg)
+![](http://qn.throneclay.top/intelopenmp10_9_2.jpg_s.jpg)
 
 logical 和 physical不建议使用,因为以后intel Compiler可能会不再支持这两种方式,他们其实类似与compact和scatter方式,这里就不再多说了。
 

@@ -11,11 +11,11 @@ Intel KNL是Intel MIC架构的第二代产品代号，其一代产品为KNC。�
 先说一下命名规则，第一代的Xeon Phi的编号是3110,5110,7110,7120，因此也被称为X100，而第二代为了跟一代区别，同时为了能有点共性，就被称为X200，我们拿到的是7210，实际上还是7230,7250,7290，其中，7290是最高配版，核数最多（72核），频率最高。
 二代MIC最大的特点就是直插主板，直插主板的型号有两种，一种不带fabric，另一种带fabric（命名后面带F如7210F），另外还提供有PCIE版，目前还没出来，型号暂时未知。
 给张图可能会更清楚，这是在KNL的一般介绍中都有的图，KNL封装有16G的MCDRAM，速度较快，在400GB/s左右。
-![](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/architecture.png)
+![](http://qn.throneclay.top/image/jpg/architecture.png)
 
 ## Microarchitecture
 一个细节图把参数基本说的很详细了
-![](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/details.png)
+![](http://qn.throneclay.top/image/jpg/details.png)
 
 ## Key Features
 
@@ -37,7 +37,7 @@ Cluster模式大的方面分为五种模式，但中间有几种结构很相似�
 为了更好的解释他的工作原理，这里对几种Cache miss进行分别介绍，**假设A为发生Cache miss的Tile，而B为可能已缓存过这个Memory的Tile，D为Memory 控制器。**
 
 #### AlltoAll 模式
-![AlltoAll Mode](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/cluster1.png)
+![AlltoAll Mode](http://qn.throneclay.top/image/jpg/cluster1.png)
 
 这种模式下所有的Tile全连接，Tile和MCDRAM控制器之间不会绑定，内存地址均分到所有的TD(Tag Directory)上。
 
@@ -50,7 +50,7 @@ cache miss的四种情况：
 这4种过程中，第四种情况的发生很可能会严重影响性能，接下来的模式可以改善这种情况发生对性能的影响。
 
 #### Hemisphere/Quadrant 模式
-![Quadrant Mode](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/cluster2.png)
+![Quadrant Mode](http://qn.throneclay.top/image/jpg/cluster2.png)
 
 在这种模式下，所有核心被分为2部分(Hemisphere)或4部分(Quadrant)，memory 控制器所负责的地址会被固定到对应的划分区域。以Quadrant模式为例，其前3种情况同AlltoAll模式，只有第四种情况会得到提升。
 
@@ -61,7 +61,7 @@ cache miss的四种情况：
 4. Tile B miss：Tile B会找到这个memory对应的memory 控制器D，地址此时同Tile B分在同一侧，所以能够迅速找到MCDRAM控制器，完成访存，完成整个过程。
 
 #### SNC2/SNC4 模式
-![SNC4er Mode](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/cluster3.png)
+![SNC4er Mode](http://qn.throneclay.top/image/jpg/cluster3.png)
 
 这种sub-NUMA的模式会把整个核心划分为2个(SNC2)或4个(SNC4)NUMA节点。对于有NUMA-aware的软件，这种设置的效果会很好。这种情况下，如果一个NUMA节点访问另一个NUMA节点的memory性能会很差，甚至可能出错。使用MPI加OpenMP的并行编程方法能够较好的完成此模式的并行。
 
@@ -84,7 +84,7 @@ KNL的Cluster Mode设置必须通过BIOS来进行。
 
 Intel KNL共有三种Memory模式，分别是Flat模式，Cache模式和Hybrid模式。他们的区别用下面一张图片来表示
 
-![三种memory模式](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/memoryMode.png)
+![三种memory模式](http://qn.throneclay.top/image/jpg/memoryMode.png)
 
 三种模式最大的区别就是在于片上个的MCDRAM对程序员是否可见，Flat模式下完全可见，Cache模式下完全不可见，Hybrid模式下部分可见。
 

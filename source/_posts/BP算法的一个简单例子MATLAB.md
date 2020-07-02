@@ -77,5 +77,5 @@ T=1+sin((pi/4)*P);
 plot(P,y); hold on ;plot(P,T)
 
 ```
-![](http://7xnn25.com1.z0.glb.clouddn.com/image/jpg/BPsimpleResult.png_s.jpg)
+![](http://qn.throneclay.top/image/jpg/BPsimpleResult.png_s.jpg)
 输出的结果如图，可以看到还是很好的收敛了，在书上看到这么一句话：在隐层神经元数量足够大的情况下，第一层采用sigmoid，第二层采用pureline的神经网络可以以任意精度逼近任意函数。

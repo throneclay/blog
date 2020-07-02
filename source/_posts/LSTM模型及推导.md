@@ -11,7 +11,7 @@ LSTM是1997年提出来的一种RNN神经网络结构。由于其LSTM block的�
 ## RNN基本模型
 LSTM是一种RNN结构,对于RNN来说,基本的特征就是在不同时间步上有信息的传递,如下图所示.可以看到每个RNN结构的输入有两个(地一个可以认为一个输入为0),输出也有两个.每个RNN结构的输入为上一个时间的RNN输出,以及当前时刻的输入.输出一个作为网络输出,另一个传给了下一个时刻.
 
-![](http://7xnn25.com1.z0.glb.clouddn.com/image/LSTM/RNNModule.png)
+![](http://qn.throneclay.top/image/LSTM/RNNModule.png)
 
 ## 权重定义和LSTM memory block
 
@@ -19,7 +19,7 @@ LSTM是一种RNN结构,对于RNN来说,基本的特征就是在不同时间步�
 
 一个LSTM经典结构的示意图如下,这里为了解决梯度消失和梯度爆炸,用了CEC在时间步间传输.一个LSTM结构有输入门$i$,遗忘门$f$,输出门$o$还有个配合输入门的门$g$,$g$单独写,因为他其实算是输入门的一部分,其激活函数是$tanh$,其他几个门是$sigmoid$,内部通过CEC结构后,结合输出门得到输出.
 
-![](http://7xnn25.com1.z0.glb.clouddn.com/image/LSTM/LSTMModule.png)
+![](http://qn.throneclay.top/image/LSTM/LSTMModule.png)
 
 ## 前向过程
 
@@ -33,19 +33,19 @@ $$ o = sigmoid(W\_{ox} \* x + W\_{oh} \* h\_{t-1} + b\_o) $$
 
 $$ g = tanh(W\_{gx} \* x + W\_{gh} \* h\_{t-1} + b\_g) $$
 
-![前向过程1](http://7xnn25.com1.z0.glb.clouddn.com/image/LSTM/LSTMforward1.png)
+![前向过程1](http://qn.throneclay.top/image/LSTM/LSTMforward1.png)
 
 第二个过程是记忆传导过程:
 
 $$ C\_t = C\_{t-1} \cdot f + i \cdot g $$
 
-![前向过程2](http://7xnn25.com1.z0.glb.clouddn.com/image/LSTM/LSTMforward2.png)
+![前向过程2](http://qn.throneclay.top/image/LSTM/LSTMforward2.png)
 
 第三个过程就是输出过程了.
 
 $$ h\_t = o \* tanh(C\_t) $$
 
-![前向过程3](http://7xnn25.com1.z0.glb.clouddn.com/image/LSTM/LSTMforward3.png)
+![前向过程3](http://qn.throneclay.top/image/LSTM/LSTMforward3.png)
 
 
 ## 后向过程
