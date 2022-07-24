@@ -1,6 +1,6 @@
 title: Intel KNL的特点及功能介绍
 date: 2016-08-20 16:38:37
-categories: 并行计算
+categories: 性能优化
 tags: MIC
 plink: knl_mcdram
 mathjax: true

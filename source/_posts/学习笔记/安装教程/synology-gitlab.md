@@ -2,7 +2,7 @@
 title: 在Synology DSM7.0上，找回我们熟悉的gitlab
 mathjax: true
 date: 2022-05-21 07:20:53
-categories:
+categories: 学习笔记
 tags: nas
 plink: dsm7_gitlab
 ---

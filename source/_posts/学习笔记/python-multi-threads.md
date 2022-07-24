@@ -2,7 +2,7 @@
 title: python多线程编程
 mathjax: true
 date: 2020-05-06 08:59:00
-categories: python
+categories: 学习笔记
 tags: python多线程
 plink: py-multi-threads
 ---

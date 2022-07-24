@@ -1,6 +1,6 @@
 title: ARM NEON优化笔记
 date: 2015-12-30 23:11:59
-categories: 并行计算
+categories: 性能优化
 tags: NEON
 plink: armneon
 mathjax: true

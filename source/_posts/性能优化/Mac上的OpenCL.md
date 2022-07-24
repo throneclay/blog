@@ -1,7 +1,7 @@
 title: Mac上的OpenCL
 mathjax: true
 date: 2016-7-20 11:19:39
-categories: 并行计算
+categories: 性能优化
 tags: OpenCL
 plink: macocl
 ---

@@ -1,6 +1,6 @@
 title: SNAS论文阅读笔记
 date: 2019-7-18 16:09:11
-categories: 读论文学习
+categories: 深度学习
 tags: SNAS
 plink: SNAS
 mathjax: true

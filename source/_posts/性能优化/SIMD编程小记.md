@@ -1,6 +1,6 @@
 title: SIMD编程小记
 date: 2015-12-16 18:49:40
-categories: 并行计算
+categories: 性能优化
 tags: SIMD
 plink: SIMD
 mathjax: true

@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 张帅的技术博客
+title: 流水的账
 subtitle: 戒骄戒躁，脚踏实地。
 description:
 author: Zhang shuai
@@ -53,11 +53,12 @@ highlight:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  嵌入式 : embeddedSystem
+  编译器 : compiler
   机器学习 : machineLearning
-  并行计算 : parallelComputing
+  嵌入式 : embeddedSystem
+  深度学习 : deepLearning
+  性能优化 : optimization
   学习笔记 : studyNotes
-  读论文学习 : readPapers
   生活 : lifes
 tag_map:
 

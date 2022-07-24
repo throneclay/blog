@@ -1,6 +1,6 @@
 title: 找到kernel性能分界线的尝试
 date: 2019-07-18 9:20:59
-categories: 并行计算
+categories: 性能优化
 tags: kernel开发
 plink: kernel_split
 mathjax: true

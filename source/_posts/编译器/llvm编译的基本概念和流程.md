@@ -2,7 +2,7 @@
 title: llvm编译的基本概念和流程
 mathjax: true
 date: 2020-06-23 08:10:53
-categories: llvm
+categories: 编译器
 tags: llvm
 plink: llvm-note
 ---

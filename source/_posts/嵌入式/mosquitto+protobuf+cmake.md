@@ -2,7 +2,7 @@
 title: mosquitto+protobuf实战
 mathjax: true
 date: 2020-02-17 15:55:44
-categories: 学习笔记
+categories: 嵌入式
 tags: mosquitto
 plink: mqtt_protobuf
 ---

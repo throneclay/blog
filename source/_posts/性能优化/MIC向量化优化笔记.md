@@ -1,6 +1,6 @@
 title: Intel MIC向量化优化笔记
 date: 2015-12-31 13:20:17
-categories: 并行计算
+categories: 性能优化
 tags: MIC
 plink: micsimd
 mathjax: true

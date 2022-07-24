@@ -6,8 +6,6 @@ plink: ipythonNotebookServer
 mathjax: true
 ---
 
-
-
 ## ipython介绍和安装
 ipython是一个很好用的python交互式shell，支持自动补全，语法高亮，代码调试，支持bash命令，在linux下使用的很是开心。本来像python这样的语言，很适合在shell中交互式编程，配合ipython来使用，很方便。
 在Fedora下安装可以直接使用yum

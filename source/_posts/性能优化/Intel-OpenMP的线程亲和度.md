@@ -1,6 +1,6 @@
 title: Intel OpenMP的线程亲和度
 date: 2015-10-09 16:07:35
-categories: 并行计算
+categories: 性能优化
 tags: openmp
 plink: intelOpenmp
 mathjax: true

@@ -1,7 +1,7 @@
 title: LSTM模型完整前向和后向推导
 mathjax: true
 date: 2017-02-18 12:16:47
-categories: 机器学习
+categories: 深度学习
 tags: LSTM
 plink: LSTM
 ---
