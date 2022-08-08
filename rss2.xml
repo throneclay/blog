@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>流水的账</title>
+    <link>http://blog.throneclay.top/</link>
+    
+    <atom:link href="http://blog.throneclay.top/rss2.xml" rel="self" type="application/rss+xml"/>
+    
+    <description></description>
+    <pubDate>Mon, 08 Aug 2022 08:58:04 GMT</pubDate>
+    <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>使用docker部署支持备份，全docker环境的postgres+confluence环境</title>
+      <link>http://blog.throneclay.top/2022/08/08/confluence_synology/</link>
+      <guid>http://blog.throneclay.top/2022/08/08/confluence_synology/</guid>
+      <pubDate>Mon, 08 Aug 2022 07:49:21 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;本来我已经不想再写什么装个什么软件，配个什么环境的东西了，网上一搜一大堆，跟着搞搞也没什么了，再差就去看看官方的文档，也很容易解决遇到的问题。但这次装confluence既没有了官方的支持（官方文章仅作为一个参考吧），网上找的教程虽然一大堆，但基本也都是复制粘贴的，而且还不</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/nas/">nas</category>
+      
+      
+      <comments>http://blog.throneclay.top/2022/08/08/confluence_synology/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>在Synology DSM7.0上，找回我们熟悉的gitlab</title>
+      <link>http://blog.throneclay.top/2022/05/21/dsm7_gitlab/</link>
+      <guid>http://blog.throneclay.top/2022/05/21/dsm7_gitlab/</guid>
+      <pubDate>Sat, 21 May 2022 07:20:53 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;很早的时候手上买了群晖的918作为家里的nas，平时放一些文档，深度学习的数据，最重要的还充当我个人的开发环境及服务器。在DSM6.X的时代，Synology上有gitlab组件，可以方便的搭建gitlab托管自己代码。虽然网上有很多吐槽他不稳定的，但在6.x上我用的还是一</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/nas/">nas</category>
+      
+      
+      <comments>http://blog.throneclay.top/2022/05/21/dsm7_gitlab/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>llvm编译的基本概念和流程</title>
+      <link>http://blog.throneclay.top/2020/06/23/llvm-note/</link>
+      <guid>http://blog.throneclay.top/2020/06/23/llvm-note/</guid>
+      <pubDate>Tue, 23 Jun 2020 08:10:53 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;近期跟着《LLVM Cookbook》学习了一下LLVM相关的内容，趁着学完还算熟悉，赶紧写一下笔记和总结，方便以后的回顾。LLVM的全称是Low Level Virtual</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/compiler/">编译器</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/llvm/">llvm</category>
+      
+      
+      <comments>http://blog.throneclay.top/2020/06/23/llvm-note/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>python多线程编程</title>
+      <link>http://blog.throneclay.top/2020/05/06/py-multi-threads/</link>
+      <guid>http://blog.throneclay.top/2020/05/06/py-multi-threads/</guid>
+      <pubDate>Wed, 06 May 2020 08:59:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;多线程编程, 找到了一个非常简洁又有效的网站，本来这个事情简单说一下就可以知道了，找了好多介绍发现都会讲一大堆。。终于在这里找到了想要的东西，这里安利一波：&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/python%E5%A4%9A%E7%BA%BF%E7%A8%8B/">python多线程</category>
+      
+      
+      <comments>http://blog.throneclay.top/2020/05/06/py-multi-threads/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>libtorch c++ api上手指南</title>
+      <link>http://blog.throneclay.top/2020/03/10/libtorch_cpp/</link>
+      <guid>http://blog.throneclay.top/2020/03/10/libtorch_cpp/</guid>
+      <pubDate>Tue, 10 Mar 2020 06:49:33 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;前段时间为了测试，了解过libtorch，里面有些坑，这里简要记一下。&lt;/p&gt;
+&lt;h2 id=&quot;libtorch包的选择&quot;&gt;&lt;a href=&quot;#libtorch包的选择&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/deepLearning/">深度学习</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/pytorch/">pytorch</category>
+      
+      
+      <comments>http://blog.throneclay.top/2020/03/10/libtorch_cpp/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>yolov3实战指南--训练自有数据集并完成TensorRT推理实践</title>
+      <link>http://blog.throneclay.top/2020/03/05/yolo-learning2/</link>
+      <guid>http://blog.throneclay.top/2020/03/05/yolo-learning2/</guid>
+      <pubDate>Thu, 05 Mar 2020 11:05:40 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;就在写这篇文章的时候，yolo作者Joseph</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/deepLearning/">深度学习</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/yolo/">yolo</category>
+      
+      
+      <comments>http://blog.throneclay.top/2020/03/05/yolo-learning2/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>yolov3论文详解--我们究竟在训练什么</title>
+      <link>http://blog.throneclay.top/2020/02/19/yolo-learning/</link>
+      <guid>http://blog.throneclay.top/2020/02/19/yolo-learning/</guid>
+      <pubDate>Wed, 19 Feb 2020 03:45:23 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;就在写这篇文章的时候，yolo作者Joseph Redmon宣布停止CV研究，很可能yolov3将成为yolo系列的终局。想到这个感觉还是要好好写一下yolo啊。本来只想写一篇来介绍一下yolov3并记录下我是如何用到自己数据集上，写完后发现篇幅很长，遂拆成两部分。</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/deepLearning/">深度学习</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/yolo/">yolo</category>
+      
+      
+      <comments>http://blog.throneclay.top/2020/02/19/yolo-learning/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>mosquitto+protobuf实战</title>
+      <link>http://blog.throneclay.top/2020/02/17/mqtt_protobuf/</link>
+      <guid>http://blog.throneclay.top/2020/02/17/mqtt_protobuf/</guid>
+      <pubDate>Mon, 17 Feb 2020 15:55:44 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;因为前段时间急需一个能够搞定通信问题，所以调研了一下，找到了mosquitto适配后效果非常好，但他的例子比较少，我写了一个简单的示例，通信采用了mqtt协议，mosquitto搭建的服务器，通信的内容采用了protobuf进行序列化和反序列化，基本能够应付常见的各类情况。</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/embeddedSystem/">嵌入式</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/mosquitto/">mosquitto</category>
+      
+      
+      <comments>http://blog.throneclay.top/2020/02/17/mqtt_protobuf/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>你好小助手，帮我买瓶酱油--gitlab-runner搭建小记</title>
+      <link>http://blog.throneclay.top/2019/12/12/gitlab_runner/</link>
+      <guid>http://blog.throneclay.top/2019/12/12/gitlab_runner/</guid>
+      <pubDate>Thu, 12 Dec 2019 16:05:10 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;人手还是不够啊，好多活都有积攒，随着开发的不断进行，越来越感觉要加上CI的流程了，至少稍微规范一下自己的开发，在这个人比机器贵的时代，能让机器干的事就还是让机器去干吧。&lt;/p&gt;
+&lt;p&gt;目的很简单，其实就是想稍微控制下代码质量，一旦出问题，能方便查找问题，而且对版本也做一下控</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/gitlab/">gitlab</category>
+      
+      
+      <comments>http://blog.throneclay.top/2019/12/12/gitlab_runner/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>ffmpeg几种场景下的用法小记</title>
+      <link>http://blog.throneclay.top/2019/11/23/ffmpeg_basic/</link>
+      <guid>http://blog.throneclay.top/2019/11/23/ffmpeg_basic/</guid>
+      <pubDate>Sat, 23 Nov 2019 12:23:39 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;作为老牌的集编解码等于一体的视频库，ffmpeg功能十分强大，而且ffmpeg被编译到了多种设备上面，几乎各个平台都能看到他的身影。虽然功能强大，但强大的背后带来的就是复杂的命令和选项。实际的视频场景没有那么多，而且相对比较固定，这里记录了几种用到的ffmpeg的使用方法，</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/ffmpeg/">ffmpeg</category>
+      
+      
+      <comments>http://blog.throneclay.top/2019/11/23/ffmpeg_basic/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>SNAS论文阅读笔记</title>
+      <link>http://blog.throneclay.top/2019/07/18/SNAS/</link>
+      <guid>http://blog.throneclay.top/2019/07/18/SNAS/</guid>
+      <pubDate>Thu, 18 Jul 2019 16:09:11 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;从Google第一篇AutoDL的论文开始，在这方面的论文层出不穷，目测已经成为一个很活跃的研究方向，从一开始上千块TPU发展到现在一天内就能搜到SOTA的结果。NAS已经火了有段时间了，近期才有时间系统的看一下AutoDL相关的内容，SNAS是我最近看的一篇论文，这里做下</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/deepLearning/">深度学习</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/SNAS/">SNAS</category>
+      
+      
+      <comments>http://blog.throneclay.top/2019/07/18/SNAS/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>找到kernel性能分界线的尝试</title>
+      <link>http://blog.throneclay.top/2019/07/18/kernel_split/</link>
+      <guid>http://blog.throneclay.top/2019/07/18/kernel_split/</guid>
+      <pubDate>Thu, 18 Jul 2019 09:20:59 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;实现一个大而美的kernel往往是不现实的，在各种硬件上针对特定case下的kernel很容易能够突破针对通用case实现的kernel，所以实现的kernel在某些case下表现好，某些case下表现的就不是那么好，如何快速正确的找到各个kernel的性能曲线，既能更好的</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/optimization/">性能优化</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/kernel%E5%BC%80%E5%8F%91/">kernel开发</category>
+      
+      
+      <comments>http://blog.throneclay.top/2019/07/18/kernel_split/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>用vscode remote在github上愉快的开发hexo</title>
+      <link>http://blog.throneclay.top/2019/05/08/vscode_github_hexo/</link>
+      <guid>http://blog.throneclay.top/2019/05/08/vscode_github_hexo/</guid>
+      <pubDate>Wed, 08 May 2019 12:13:28 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;用hexo真不是新鲜事了，毕业后工作一直很忙，最近组织调整事情变少了，发现博客也登不上了，域名也过期了，只得重新来弄，又发现之前配置的时候什么记录也没留下。回想当时为了开发博客还得自己安装一堆node.js的东西，每次还要解决一圈依赖问题就头疼。为了一劳永逸的解决这些问题，</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/hexo/">hexo</category>
+      
+      
+      <comments>http://blog.throneclay.top/2019/05/08/vscode_github_hexo/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Clion的一些使用技巧</title>
+      <link>http://blog.throneclay.top/2017/03/28/clion/</link>
+      <guid>http://blog.throneclay.top/2017/03/28/clion/</guid>
+      <pubDate>Tue, 28 Mar 2017 23:47:20 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;Clion是我最近发现的一个非常好用的IDE，界面做的很漂亮，而且功能做的不错，尤其跨平台的特点对我来说很方便，在Mac和linux上找个好看好用的IDE并不容易。缺点之一是Clion上用的是CMakeLiist而不是我熟悉的Makefile来管理项目，所以也就有了这里的记</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/Clion/">Clion</category>
+      
+      
+      <comments>http://blog.throneclay.top/2017/03/28/clion/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>LSTM模型完整前向和后向推导</title>
+      <link>http://blog.throneclay.top/2017/02/18/LSTM/</link>
+      <guid>http://blog.throneclay.top/2017/02/18/LSTM/</guid>
+      <pubDate>Sat, 18 Feb 2017 12:16:47 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;LSTM是1997年提出来的一种RNN神经网络结构。由于其LSTM</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/deepLearning/">深度学习</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/LSTM/">LSTM</category>
+      
+      
+      <comments>http://blog.throneclay.top/2017/02/18/LSTM/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>archlinux安装图形界面及跳坑</title>
+      <link>http://blog.throneclay.top/2017/01/28/archgui/</link>
+      <guid>http://blog.throneclay.top/2017/01/28/archgui/</guid>
+      <pubDate>Sat, 28 Jan 2017 21:20:10 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;前面装完archlinux后只是一个非常基础的命令行界面，没有图形界面，对于现自己用的个人电脑，当然还是要有个漂亮的图形界面的了。其实archlinux的官方wiki写的非常清楚，而且文档等等也很完善，这里就是简单的记录下自己的安装过程，方便自己以后回顾。文章按照几种常用的</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/archlinux/">archlinux</category>
+      
+      
+      <comments>http://blog.throneclay.top/2017/01/28/archgui/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>win10和archlinux双系统安装记录</title>
+      <link>http://blog.throneclay.top/2017/01/13/wadual/</link>
+      <guid>http://blog.throneclay.top/2017/01/13/wadual/</guid>
+      <pubDate>Fri, 13 Jan 2017 17:03:07 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;近期买了个骷髅峡谷，其实目的就是想体验下最强核显的效果，这个NUC做的很小巧，性能又很不错，支持type-c输出，用作个人电脑感觉很是不错。随着用的时间越久，感觉越喜欢这个小东西。这里记录下安装win10和archlinux的经历，使用的是UEFI启动加GPT分区，wind</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/archlinux/">archlinux</category>
+      
+      
+      <comments>http://blog.throneclay.top/2017/01/13/wadual/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>一篇高频交易中的机器学习论文</title>
+      <link>http://blog.throneclay.top/2017/01/13/hft/</link>
+      <guid>http://blog.throneclay.top/2017/01/13/hft/</guid>
+      <pubDate>Fri, 13 Jan 2017 16:57:10 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;最近在看量化交易的内容，重点是应用深度学习方法对金融数据进行分析，需要学的东西很多，这里找到了一篇很好的介绍这方面内容的论文。&lt;br&gt;Machine Learning for Market Microstructure and High Frequency Trading</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/%E9%AB%98%E9%A2%91%E4%BA%A4%E6%98%93/">高频交易</category>
+      
+      
+      <comments>http://blog.throneclay.top/2017/01/13/hft/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>MacOS小技巧</title>
+      <link>http://blog.throneclay.top/2017/01/04/mac/</link>
+      <guid>http://blog.throneclay.top/2017/01/04/mac/</guid>
+      <pubDate>Wed, 04 Jan 2017 20:56:53 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;因为公司给配了个苹果笔记本，我也开始慢慢转向苹果系统，不得不说，这个系统还是很好的结合了windows和linux的优势，bug也相对少一些，用起来感觉比较可靠。但是用的时候还是有一些地方感觉不爽，这里记录了一点平时用macbook的一些小技巧，方便以后查阅，以后也会慢慢更</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/studyNotes/">学习笔记</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/Mac/">Mac</category>
+      
+      
+      <comments>http://blog.throneclay.top/2017/01/04/mac/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>BP算法的一个简单例子MATLAB</title>
+      <link>http://blog.throneclay.top/2016/11/19/BPSimple/</link>
+      <guid>http://blog.throneclay.top/2016/11/19/BPSimple/</guid>
+      <pubDate>Sat, 19 Nov 2016 16:17:22 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;BP算法是深度学习的训练算法，没有好的训练就不可能有好的分类结果，最近看了Martin T.</description>
+          
+        
+      
+      
+      
+      
+      <category domain="http://blog.throneclay.top/categories/machineLearning/">机器学习</category>
+      
+      
+      <category domain="http://blog.throneclay.top/tags/Deep-learning/">Deep learning</category>
+      
+      
+      <comments>http://blog.throneclay.top/2016/11/19/BPSimple/#disqus_thread</comments>
+      
+    </item>
+    
+  </channel>
+</rss>

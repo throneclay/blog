@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;zh-TW&quot;,&quot;en&quot;,&quot;de-DE&quot;,&quot;es-ES&quot;,&quot;fr-FR&quot;,&quot;ko&quot;,&quot;default&quot;]"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>SNAS论文阅读笔记 | 流水的账</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" href="/rss2.xml"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">SNAS论文阅读笔记</h1><a id="logo" href="/.">流水的账</a><p class="description">戒骄戒躁，脚踏实地。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/rss2.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">SNAS论文阅读笔记</h1><div class="post-meta">2019-07-18<span> | </span><span class="category"><a href="/categories/deepLearning/">深度学习</a></span></div><a class="disqus-comment-count" href="/2019/07/18/SNAS/#vcomment"><span class="valine-comment-count" data-xid="/2019/07/18/SNAS/"></span><span> 条评论</span></a><div class="post-content"><p>从Google第一篇AutoDL的论文开始，在这方面的论文层出不穷，目测已经成为一个很活跃的研究方向，从一开始上千块TPU发展到现在一天内就能搜到SOTA的结果。NAS已经火了有段时间了，近期才有时间系统的看一下AutoDL相关的内容，SNAS是我最近看的一篇论文，这里做下简单的整理和总结，主要也是为自己留下一份知识储备，方便以后快速回顾。</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>这篇论文主要有两个贡献点或者创新点，一个是使用Gumbel分布将离散的One-hot同连续可微空间联系起来，再一个是增加资源限制的计算，搜索时会同时考虑进计算量，参数和内存访问的代价进去。也是通过cell的方式搭建网络。</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>由于没有官方的代码，很多实现也是看论文以及darts的代码结合理解的。论文附录里有个图画的非常好，顺带说一下基本的流程和结构。</p>
+<p>这里i,j都表示的是node，也就是tensor，$O^n_{i,j}$表示的是连接i,j之间的op的第n个候选op，可以是conv或者pooling或者其他各种op的组合。$z^n_{i,j}$可以理解为各个候选op对于输出结果的权重，不同的实现这里的处理差异很大，本文是使用了gumbel softmax将离散的one-hot转变为连续的gumbel分布，从而可以进行梯度下降。gumbel softmax在很多论文中都有提到，是一个非常重要的连接离散和连续空间的桥梁。one-hot简单说就是一个0-1向量，只有一个值为1，其他都为0.</p>
+<p>这样的一个从i到j的结构在darts里是被称为mixop，这里暂且也叫它mixop吧。mixop的候选可以有很多，但太多的候选会导致一个是训练时间变长，再一个就是显存不一定够用。这里通常都是延续enas里面对于这种候选op的设定。</p>
+<h2 id="搜索空间和网络采样"><a href="#搜索空间和网络采样" class="headerlink" title="搜索空间和网络采样"></a>搜索空间和网络采样</h2><p>$O_{i,j}$代表连接node(i)和node(j)的候选op，对于$x_j$就可以表示成如下：</p>
+<p>$$x_j&#x3D;\sum_{i&lt;j}Õ_{i,j}(x_i)$$</p>
+<p>这里的$Õ_{i,j}$表示的是选中的operation。由于最终网络只会选定一个op来连接i和j，这里论文将上式改写成每个候选op的结果乘以一个one-hot的结构。</p>
+<p>$$x_j&#x3D;\sum_{i&lt;j}Õ_{i,j}(x_i)&#x3D;\sum_{i&lt;j}Z^T_{i,j}O_{i,j}(x_i)$$</p>
+<p>这个地方的$Z^T_{i,j}$可以看作是各个候选op的权重，权重的不同将会直接影响mixop的连接，也相当于改变了cell的结构。所以问题就由找到一个合适的网络结构变成找到一个合适的one-hot变量Z。</p>
+<h2 id="结构和op的参数学习"><a href="#结构和op的参数学习" class="headerlink" title="结构和op的参数学习"></a>结构和op的参数学习</h2><h3 id="cell结构"><a href="#cell结构" class="headerlink" title="cell结构"></a>cell结构</h3><p>由于论文里也提到snas的cell结构和mixop候选同enas，darts这些网络很接近，所以这里就假设是一样的，顺便也说一下cell结构是什么样的。</p>
+<p>cell主要有网络结构的共享和简化网络结构抽象的功能，一般将cell抽象为normal和reduction两种，对于normal的结构，输入和输出的channel数保持不变，对于reduction的cell，相当于过了一次stride&#x3D;2，输出的channel数也会加倍。这些都是简单的一些设置，完全可以走不同的设置看看效果。</p>
+<p>enas的cell有两个输入，两个输入为他之前的cells，cell的输出为内部的各个mixop的concat。然后继续接下一个cell，以此反复。</p>
+<p>在所有cell的最前面会有stem的结构，这个结构简单的话可以用一个大kernel的conv，通常会对输入的image的channel调整到一个合适的数值。像resnet等的第一个conv都是7x7的大kernel卷积。</p>
+<p>最后的部分通常就是head了，head可以实现很多种，如针对不同问题的分类的head，或者可以接detection的head等等，不过backbone部分就是使用snas或者其他方法找到的网络结构了。</p>
+<h3 id="参数学习方法-Gumbel-Softmax"><a href="#参数学习方法-Gumbel-Softmax" class="headerlink" title="参数学习方法, Gumbel Softmax"></a>参数学习方法, Gumbel Softmax</h3><p>继续前面的搜索最优one-hot变量$Z_{i,j}$的过程。由于$Z$是一个离散的变量，梯度到了这一层没有办法传播，为了能够将搜索$Z$的过程，这里让$Z$成为gumbel-softmax的输出，表达式如下</p>
+<p>$$Z^k_{i,j}&#x3D;f_{\alpha_{i,j}}(G^k_{i,j})<br>&#x3D;\frac{exp((log\alpha^k_{i,j} + G^k_{i,j})&#x2F;\lambda)}{\sum^n_{l&#x3D;0}exp((log\alpha^l_{i,j} + G^l_{i,j})&#x2F;\lambda)}$$</p>
+<p>这一层很像softmax的表达式，多了$G^k_{i,j}$和$\lambda$。</p>
+<p>$G^k_{i,j}&#x3D;-log(-log(U^k_{i,j}))$是第k个gumbel随机变量，这里$G$就是服从gumbel分布的变量了，$U^k_{i,j}$就是第k个均匀分布的随机变量，$U$就是服从均匀分布。</p>
+<p>$\lambda$被称为softmax的温度，这个值越小，输出的$Z^k_{i,j}$就越接近一个one-hot的输出，所以可以猜到一开始的温度是一个相对较大的值，随着搜索的进行，温度会逐渐变小，直到$Z$完全变为one-hot的结果。论文里没有提到如果对$\lambda$进行调整，我试了一些方法，大概$\lambda$从5.0或10.0开始下降，大概到1e-3基本可以认为就是one-hot的变量了。</p>
+<p>这里面还有一个变量$\alpha$就是需要训练得到的结构参数了，这个值直接影响输出的one-hot的值，既然有两种cell，可以理解为也有两组$\alpha$的值了，一组是normal的，一组是reduction的。</p>
+<h3 id="credit-assignment"><a href="#credit-assignment" class="headerlink" title="credit assignment"></a>credit assignment</h3><p>文中提到这个地方感觉像是被reviewer问到了，为了同enas做对比，主要是抓住强化学习难以及时将reward分配到每个mixop上面，而snas因为将离散的选择问题抽象为连续的gumbel分布，所以每个mixop上的梯度就可以当作其reward，当然这是把这个过程同强化学习的过程做对比，但所有走stochastic的方法都有这方面的便利，这里也就不展开讨论了。</p>
+<h2 id="资源限制"><a href="#资源限制" class="headerlink" title="资源限制"></a>资源限制</h2><p>文中使用了一些对op的计算量和资源使用的抽象，通过对这些资源花费cost的优化达到资源限制的效果，这里记录下论文里的方法。</p>
+<p>论文中记录了三个主要的候选参数，分别是1)参数量，2)float操作数、3)memory访问。参数量相当于计算weights部分的数值，float操作数按照各个op计算的过程估计，memory访问文中叫MAC，是输入和输出的尺寸。有了这些数值后，加上一个系数就。之前的loss就直接加上这个cost了。</p>
+<p>$$E_{Z<del>p_\alpha(Z)}[L_\theta(Z)+C(Z)]&#x3D;E_{Z</del>p_\alpha(Z)}[L_\theta(Z)+E_{Z~p_\alpha(Z)}[C(Z)]]$$</p>
+<p>这个cost也是跟前面的one-hot相关的一个值，因此对于loss函数整体的优化还是会落到对$Z$的优化上，就和前面接起来了。</p>
+<p>$$C(Z)&#x3D;\sum_{i,j}C(Z_{i,j})&#x3D;\sum_{i,j}Z^T_{i,j}C(O_{i,j})$$</p>
+<p>论文里处理的比较粗暴，也没太考虑不同op差异巨大的问题，这里可以使用一些方法做一定的normalize，可能效果会更好</p>
+<h1 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h1><p>这里简单展示一下论文里提到的效果。</p>
+<p>cifar10的实验结果</p>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Test error</th>
+<th>Params(M)</th>
+<th>Search Cost (GPU days)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>snas(single-level) + mild constraint</td>
+<td>2.98</td>
+<td>2.9</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>snas(single-level) + moderate constraint</td>
+<td>2.85</td>
+<td>2.8</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>snas(single-level) + aggressive constraint</td>
+<td>3.10</td>
+<td>2.3</td>
+<td>1.5</td>
+</tr>
+</tbody></table>
+<p>imagenet的实验结果</p>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Test error(top1)</th>
+<th>Test error(top5)</th>
+<th>Params(M)</th>
+<th>Search Cost (GPU days)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>snas(single-level) + mild constraint</td>
+<td>27.3</td>
+<td>9.2</td>
+<td>4.3</td>
+<td>1.5</td>
+</tr>
+</tbody></table>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>snas上能够看到enas，darts的影子，也能嗅到MNAS和更之后的FBNet的味道，这里重点也记录一下这几篇工作的一些要点，为进一步阅读抛砖引玉。</p>
+<h2 id="ENAS，DARTS"><a href="#ENAS，DARTS" class="headerlink" title="ENAS，DARTS"></a>ENAS，DARTS</h2><p>enas感觉是第一篇把nas推向实际一点的工作，从enas开始，网络搜索开始逐渐平民化，不再是用超多GPU或TPU怼出来的离实际很远的东西。enas里面的cell，和mixop的方法到现在都一直沿用，enas的代码也开源，对于推动nas发展起了很重要的作用，enas是使用强化学习的一种方法，有很多思想可以借鉴。</p>
+<p>darts是这两年把网络搜索压缩到单卡单天的一个工作，代码也是开源的，使用的也是基于梯度的方法，沿用了很多enas的设置，也采用cell和mixop的方法对网络搜索建模，之前跑过他们的代码，对于想快速学习是非常不错的选择。</p>
+<h2 id="MNAS，FBNet"><a href="#MNAS，FBNet" class="headerlink" title="MNAS，FBNet"></a>MNAS，FBNet</h2><p>MNAS和FBNet还有很多这方面的工作，属于将实际落地中非常看中的延时和模型尺寸考虑进去，不仅注重网络搜索过程，也将实际手机上运行的延时结果反馈给网络搜索过程。</p>
+<p>SNAS是一篇承上启下的论文，现在基于梯度的方法大有增长的趋势，到了darts和snas基本已经到了1个GPU day的水平，使用多目标优化的方法如把硬件和op的限制考虑进网络搜索中的也在慢慢兴起，未来这种类型的结合也肯定会层出不穷，如果这个时候想切入nas的领域，snas是一篇不错的切入点，缺点就是作者没有开出源码，如果有源码那就更好了。</p>
+<p>至此，撒花～</p>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功!"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/zhifubao.jpg"></li><li id="WeChat" qr="/images/weixin.jpg"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="post-copyright"><script type="text/javascript" src="/js/copyright.js?v=1.0.0" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copyright.css?v=1.0.0"><p><span>本文标题：</span>SNAS论文阅读笔记</p><p><span>文章作者：</span>throneclay</p><p><span>发布时间：</span>2019-07-18</p><p><span>最后更新：</span>2022-08-03</p><p><span>原始链接：</span><a href="/2019/07/18/SNAS/">http://blog.throneclay.top/2019/07/18/SNAS/</a><span class="copy-path"><i class="fa fa-clipboard" data-clipboard-text="http://blog.throneclay.top/2019/07/18/SNAS/"></i></span></p><p><span>版权声明：</span>本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！</p></div><br><div class="tags"><a href="/tags/SNAS"><i class="fa fa-tag">SNAS</i></a></div><div class="post-nav"><a class="pre" href="/2019/11/23/ffmpeg_basic/">ffmpeg几种场景下的用法小记</a><a class="next" href="/2019/07/18/kernel_split/">找到kernel性能分界线的尝试</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == 'true' ? true : false;
+var verify = 'false' == 'true' ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'NqMIHIDAGzizQKypAqjrPjre-gzGzoHsz',
+  appKey:'cHLz1Wk17aR4Mjr2LvimJRCm',
+  placeholder:'评论一下',
+  avatar:'wavatar',
+  guest_info:guest_info,
+  pageSize:'20'
+})
+</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://blog.throneclay.top"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://github.com/throneclay" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/studyNotes/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/embeddedSystem/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/optimization/">性能优化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/machineLearning/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/deepLearning/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/compiler/">编译器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/python%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 15px;">python多线程</a> <a href="/tags/%E9%AB%98%E9%A2%91%E4%BA%A4%E6%98%93/" style="font-size: 15px;">高频交易</a> <a href="/tags/raspberryPi/" style="font-size: 15px;">raspberryPi</a> <a href="/tags/NEON/" style="font-size: 15px;">NEON</a> <a href="/tags/MSP430/" style="font-size: 15px;">MSP430</a> <a href="/tags/mosquitto/" style="font-size: 15px;">mosquitto</a> <a href="/tags/OpenCL/" style="font-size: 15px;">OpenCL</a> <a href="/tags/SIMD/" style="font-size: 15px;">SIMD</a> <a href="/tags/MIC/" style="font-size: 15px;">MIC</a> <a href="/tags/Deep-learning/" style="font-size: 15px;">Deep learning</a> <a href="/tags/caffe/" style="font-size: 15px;">caffe</a> <a href="/tags/kernel%E5%BC%80%E5%8F%91/" style="font-size: 15px;">kernel开发</a> <a href="/tags/theano/" style="font-size: 15px;">theano</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">机器学习</a> <a href="/tags/openmp/" style="font-size: 15px;">openmp</a> <a href="/tags/llvm/" style="font-size: 15px;">llvm</a> <a href="/tags/LSTM/" style="font-size: 15px;">LSTM</a> <a href="/tags/SNAS/" style="font-size: 15px;">SNAS</a> <a href="/tags/pytorch/" style="font-size: 15px;">pytorch</a> <a href="/tags/yolo/" style="font-size: 15px;">yolo</a> <a href="/tags/Clion/" style="font-size: 15px;">Clion</a> <a href="/tags/ffmpeg/" style="font-size: 15px;">ffmpeg</a> <a href="/tags/Mac/" style="font-size: 15px;">Mac</a> <a href="/tags/CUDA/" style="font-size: 15px;">CUDA</a> <a href="/tags/shadowsocks/" style="font-size: 15px;">shadowsocks</a> <a href="/tags/nas/" style="font-size: 15px;">nas</a> <a href="/tags/ipython/" style="font-size: 15px;">ipython</a> <a href="/tags/gitlab/" style="font-size: 15px;">gitlab</a> <a href="/tags/vagrant/" style="font-size: 15px;">vagrant</a> <a href="/tags/archlinux/" style="font-size: 15px;">archlinux</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/08/08/confluence_synology/">使用docker部署支持备份，全docker环境的postgres+confluence环境</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/05/21/dsm7_gitlab/">在Synology DSM7.0上，找回我们熟悉的gitlab</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/23/llvm-note/">llvm编译的基本概念和流程</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/py-multi-threads/">python多线程编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/10/libtorch_cpp/">libtorch c++ api上手指南</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/05/yolo-learning2/">yolov3实战指南--训练自有数据集并完成TensorRT推理实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/19/yolo-learning/">yolov3论文详解--我们究竟在训练什么</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/17/mqtt_protobuf/">mosquitto+protobuf实战</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/12/gitlab_runner/">你好小助手，帮我买瓶酱油--gitlab-runner搭建小记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/23/ffmpeg_basic/">ffmpeg几种场景下的用法小记</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/throneclay" title="github" target="_blank">github</a><ul></ul><a href="http://zhangjikai.com/" title="zhangjikai" target="_blank">zhangjikai</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2022 <a href="/." rel="nofollow">流水的账.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>

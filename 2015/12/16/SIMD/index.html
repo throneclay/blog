@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;zh-TW&quot;,&quot;en&quot;,&quot;de-DE&quot;,&quot;es-ES&quot;,&quot;fr-FR&quot;,&quot;ko&quot;,&quot;default&quot;]"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>SIMD编程小记 | 流水的账</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" href="/rss2.xml"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">SIMD编程小记</h1><a id="logo" href="/.">流水的账</a><p class="description">戒骄戒躁，脚踏实地。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/rss2.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">SIMD编程小记</h1><div class="post-meta">2015-12-16<span> | </span><span class="category"><a href="/categories/optimization/">性能优化</a></span></div><a class="disqus-comment-count" href="/2015/12/16/SIMD/#vcomment"><span class="valine-comment-count" data-xid="/2015/12/16/SIMD/"></span><span> 条评论</span></a><div class="post-content"><p>SIMD是指的单指令多数据的一种并行处理方式，目前大多数CPU都集成有向量处理器VPU就是一种典型的SIMD处理单元。Intel的SSE，AVX等等指令集就是用来操作VPU的。如果能够很好的利用起VPU，能够达到很好的加速效果。写这篇文章主要是因为最近在看各种向量化技术，顺便还看到了一个很好的表格，特此在这里记一下。</p>
+<h2 id="头文件-Headers"><a href="#头文件-Headers" class="headerlink" title="头文件 Headers"></a>头文件 Headers</h2><p>CPU上的向量化技术目前主要流行SSE和AVX，其中AVX是现在INTEL最新的CPU向量化技术。SSE和AVX都需要特殊的“函数”来告知此处使用VPU（向量处理器）来处理，这些函数的特点就是特别底层，类似汇编但又不是汇编。想要使用这些指令就需要包上对应的头文件，下面这个表格总结了关于SIMD的相关的头文件。使用时当然不需要知道这么多，immintrin.h这个文件把所有的SIMD指令都包含在内了（X86,AMD 3dnow等），如果只想使用X86系列的所有指令，那就包x86intrin.h文件。</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">+----------------+------------------------------------------------------------------------------------------+</span><br><span class="line">|<span class="string">     Header     </span>|<span class="string">                                         Purpose                                          </span>|</span><br><span class="line">+----------------+------------------------------------------------------------------------------------------+</span><br><span class="line">|<span class="string"> x86intrin.h    </span>|<span class="string"> x86 instructions _rdtsc()                                                                </span>|</span><br><span class="line">|<span class="string"> mmintrin.h     </span>|<span class="string"> MMX (Pentium MMX!)                                                                       </span>|</span><br><span class="line">|<span class="string"> mm3dnow.h      </span>|<span class="string"> 3dnow! (K6-2) (deprecated)                                                               </span>|</span><br><span class="line">|<span class="string"> xmmintrin.h    </span>|<span class="string"> SSE + MMX (Pentium 3, Athlon XP)                                                         </span>|</span><br><span class="line">|<span class="string"> emmintrin.h    </span>|<span class="string"> SSE2 + SSE + MMX (Pentiuem 4, Ahtlon 64)                                                 </span>|</span><br><span class="line">|<span class="string"> pmmintrin.h    </span>|<span class="string"> SSE3 + SSE2 + SSE + MMX (Pentium 4 Prescott, Ahtlon 64 San Diego)                        </span>|</span><br><span class="line">|<span class="string"> tmmintrin.h    </span>|<span class="string"> SSSE3 + SSE3 + SSE2 + SSE + MMX (Core 2, Bulldozer)                                      </span>|</span><br><span class="line">|<span class="string"> popcntintrin.h </span>|<span class="string"> POPCNT (Core i7, Phenom subset of SSE4.2 and SSE4A)                                      </span>|</span><br><span class="line">|<span class="string"> ammintrin.h    </span>|<span class="string"> SSE4A + SSE3 + SSE2 + SSE + MMX (Phenom)                                                 </span>|</span><br><span class="line">|<span class="string"> smmintrin.h    </span>|<span class="string"> SSE4_1 + SSSE3 + SSE3 + SSE2 + SSE + MMX (Core i7, Bulldozer)                            </span>|</span><br><span class="line">|<span class="string"> nmmintrin.h    </span>|<span class="string"> SSE4_2 + SSE4_1 + SSSE3 + SSE3 + SSE2 + SSE + MMX (Core i7, Bulldozer)                   </span>|</span><br><span class="line">|<span class="string"> wmmintrin.h    </span>|<span class="string"> AES (Core i7 Westmere, Bulldozer)                                                        </span>|</span><br><span class="line">|<span class="string"> immintrin.h    </span>|<span class="string"> AVX, SSE4_2 + SSE4_1 + SSSE3 + SSE3 + SSE2 + SSE + MMX (Core i7 Sandy Bridge, Bulldozer) </span>|</span><br><span class="line">+----------------+------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="编译器"><a href="#编译器" class="headerlink" title="编译器"></a>编译器</h2><p>目前gcc和intel的icc都支持SSE和AVX指令，但相对来说intel的编译器编译出来的代码速度一般更快一些。使用的时候带上编译选项-msse或者-mavx。不同的是对于icc还可以使用-xcode以区别gcc的编译，比如-xSSE4.2或-xAVX，对于一些特定的Intel硬件，-xcode是唯一可以用的向量化选项。</p>
+<h2 id="CPU理论浮点峰值性能"><a href="#CPU理论浮点峰值性能" class="headerlink" title="CPU理论浮点峰值性能"></a>CPU理论浮点峰值性能</h2><p>一颗CPU的理论浮点峰值性能反应了这颗CPU的最大浮点处理能力，通常也称为CPU的吞吐量。一般来说，CPU浮点风机统计的浮点计算类型只包含乘法和加法（包括减法）。对于Intel X86系列的CPU来说，计算峰值双精度为单精度的一半。<br>计算理论浮点峰值实际上就是计算一个CPU每秒种完成的乘法和加法的次数，他的单位是GFLOPS。这样我们可以得到下面的公式（VPU就是向量处理单元）<br>          单精度浮点峰值性能 &#x3D; VPU数量 × VPU频率 × 每周期乘法和加法的吞吐<br>目前主要计算时使用了VPU代替CPU主要因为VPU的性能远比CPU好，举个例子，我的i5-3470,VPU数量应该是2个，VPU主频近似于CPU主频3.2G，AVX具有FMA能够同时计算加法和乘法，同时采用SIMD计算的方式，能同时计算256长度（8个单精度浮点）的向量，因此就是2×3.2×16&#x3D;102.4GFLOPS同查到的数值一致（证明确实只有两个AVX处理单元）。再比如Intel Xeon Phi 7110P协处理器，拥有61个VPU，每个核主频1.091GHz，每个VPU长度512位（16个单精度浮点），也支持FMA，因此就是61×1.091×32&#x3D;2129.632GFLOPS，同手册上一致。其实使用这个公式的目的不是让你计算浮点性能（这个往往很容易知道），主要是来判断你有多少个VPU数量，这样在开线程的时候，可以根据这个数量来开充分向量化的线程。而不再根据你有多少个硬件线程数来开线程。<br>其实书上往往告诉你，并行计算表现最好的时候是你开的线程数等于硬件核心数的时候。但现在SIMD技术的不断成熟，编写出来的代码如果是充分向量化后的代码 ，最合适的线程数应该是你的VPU的数量。但往往我们不能达到这个充分向量化，因为程序中毕竟还有很多不适合SIMD编程的地方。对于这种VPU跑不满的问题，要么通过优化算法使其适合做成SIMD程序，要么通过增加线程数，使得不同线程达到互相掩盖访存延迟的效果。</p>
+<p>这里并不涉及SIMD编程的内容，感兴趣自己找找Intel AVX指令集手册来看看。</p>
+<h2 id="不同架构下的向量处理器"><a href="#不同架构下的向量处理器" class="headerlink" title="不同架构下的向量处理器"></a>不同架构下的向量处理器</h2><p>这里是我在网上看到的关于不同微架构下的向量处理器达到最大Flops时使用的指令方式。</p>
+<p>Intel Core 2 and Nehalem:</p>
+<ul>
+<li>4 DP FLOPs&#x2F;cycle: 2-wide SSE2 addition + 2-wide SSE2 multiplication</li>
+<li>8 SP FLOPs&#x2F;cycle: 4-wide SSE addition + 4-wide SSE multiplication</li>
+</ul>
+<p>Intel Sandy Bridge&#x2F;Ivy Bridge:</p>
+<ul>
+<li>8 DP FLOPs&#x2F;cycle: 4-wide AVX addition + 4-wide AVX multiplication</li>
+<li>16 SP FLOPs&#x2F;cycle: 8-wide AVX addition + 8-wide AVX multiplication</li>
+</ul>
+<p>Intel Haswell&#x2F;Broadwell&#x2F;Skylake:</p>
+<ul>
+<li>16 DP FLOPs&#x2F;cycle: two 4-wide FMA (fused multiply-add) instructions</li>
+<li>32 SP FLOPs&#x2F;cycle: two 8-wide FMA (fused multiply-add) instructions</li>
+</ul>
+<p>AMD K10:</p>
+<ul>
+<li>4 DP FLOPs&#x2F;cycle: 2-wide SSE2 addition + 2-wide SSE2 multiplication</li>
+<li>8 SP FLOPs&#x2F;cycle: 4-wide SSE addition + 4-wide SSE multiplication</li>
+</ul>
+<p>AMD Bulldozer&#x2F;Piledriver&#x2F;Steamroller, per module (two cores):</p>
+<ul>
+<li>8 DP FLOPs&#x2F;cycle: 4-wide FMA</li>
+<li>16 SP FLOPs&#x2F;cycle: 8-wide FMA</li>
+</ul>
+<p>Intel Atom (Bonnell&#x2F;45nm, Saltwell&#x2F;32nm, Silvermont&#x2F;22nm):</p>
+<ul>
+<li>1.5 DP FLOPs&#x2F;cycle: scalar SSE2 addition + scalar SSE2 multiplication every other cycle</li>
+<li>6 SP FLOPs&#x2F;cycle: 4-wide SSE addition + 4-wide SSE multiplication every other cycle</li>
+</ul>
+<p>AMD Bobcat:</p>
+<ul>
+<li>1.5 DP FLOPs&#x2F;cycle: scalar SSE2 addition + scalar SSE2 multiplication every other cycle</li>
+<li>4 SP FLOPs&#x2F;cycle: 4-wide SSE addition every other cycle + 4-wide SSE multiplication every other cycle</li>
+</ul>
+<p>AMD Jaguar:</p>
+<ul>
+<li>3 DP FLOPs&#x2F;cycle: 4-wide AVX addition every other cycle + 4-wide AVX multiplication in four cycles</li>
+<li>8 SP FLOPs&#x2F;cycle: 8-wide AVX addition every other cycle + 8-wide AVX multiplication every other cycle</li>
+</ul>
+<p>ARM Cortex-A9:</p>
+<ul>
+<li>1.5 DP FLOPs&#x2F;cycle: scalar addition + scalar multiplication every other cycle</li>
+<li>4 SP FLOPs&#x2F;cycle: 4-wide NEON addition every other cycle + 4-wide NEON multiplication every other cycle</li>
+</ul>
+<p>ARM Cortex-A15:</p>
+<ul>
+<li>2 DP FLOPs&#x2F;cycle: scalar FMA or scalar multiply-add</li>
+<li>8 SP FLOPs&#x2F;cycle: 4-wide NEONv2 FMA or 4-wide NEON multiply-add</li>
+</ul>
+<p>Qualcomm Krait:</p>
+<ul>
+<li>2 DP FLOPs&#x2F;cycle: scalar FMA or scalar multiply-add</li>
+<li>8 SP FLOPs&#x2F;cycle: 4-wide NEONv2 FMA or 4-wide NEON multiply-add</li>
+</ul>
+<p>IBM PowerPC A2 (Blue Gene Q), per core (supports 4 hyperthreads):</p>
+<ul>
+<li>8 DP FLOPs&#x2F;cycle: 4-wide QPX FMA every cycle</li>
+<li>SP elements are extended to DP and processed on the same units</li>
+</ul>
+<p>IBM PowerPC A2 (Blue Gene Q), per thread:</p>
+<ul>
+<li>4 DP FLOPs&#x2F;cycle: 4-wide QPX FMA every other cycle</li>
+<li>SP elements are extended to DP and processed on the same units</li>
+</ul>
+<p>Intel MIC (Xeon Phi), per core (supports 4 hyperthreads):</p>
+<ul>
+<li>16 DP FLOPs&#x2F;cycle: 8-wide FMA every cycle</li>
+<li>32 SP FLOPs&#x2F;cycle: 16-wide FMA every cycle</li>
+</ul>
+<p>Intel MIC (Xeon Phi), per thread:</p>
+<ul>
+<li>8 DP FLOPs&#x2F;cycle: 8-wide FMA every other cycle</li>
+<li>16 SP FLOPs&#x2F;cycle: 16-wide FMA every other cycle</li>
+</ul>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功!"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/zhifubao.jpg"></li><li id="WeChat" qr="/images/weixin.jpg"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="post-copyright"><script type="text/javascript" src="/js/copyright.js?v=1.0.0" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copyright.css?v=1.0.0"><p><span>本文标题：</span>SIMD编程小记</p><p><span>文章作者：</span>throneclay</p><p><span>发布时间：</span>2015-12-16</p><p><span>最后更新：</span>2022-08-03</p><p><span>原始链接：</span><a href="/2015/12/16/SIMD/">http://blog.throneclay.top/2015/12/16/SIMD/</a><span class="copy-path"><i class="fa fa-clipboard" data-clipboard-text="http://blog.throneclay.top/2015/12/16/SIMD/"></i></span></p><p><span>版权声明：</span>本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！</p></div><br><div class="tags"><a href="/tags/SIMD"><i class="fa fa-tag">SIMD</i></a></div><div class="post-nav"><a class="pre" href="/2015/12/30/armneon/">ARM NEON优化笔记</a><a class="next" href="/2015/12/16/ez430/">TI神表——eZ430-Chronos</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == 'true' ? true : false;
+var verify = 'false' == 'true' ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'NqMIHIDAGzizQKypAqjrPjre-gzGzoHsz',
+  appKey:'cHLz1Wk17aR4Mjr2LvimJRCm',
+  placeholder:'评论一下',
+  avatar:'wavatar',
+  guest_info:guest_info,
+  pageSize:'20'
+})
+</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://blog.throneclay.top"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://github.com/throneclay" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/studyNotes/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/embeddedSystem/">嵌入式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/optimization/">性能优化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/machineLearning/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/deepLearning/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/compiler/">编译器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/python%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 15px;">python多线程</a> <a href="/tags/%E9%AB%98%E9%A2%91%E4%BA%A4%E6%98%93/" style="font-size: 15px;">高频交易</a> <a href="/tags/raspberryPi/" style="font-size: 15px;">raspberryPi</a> <a href="/tags/NEON/" style="font-size: 15px;">NEON</a> <a href="/tags/MSP430/" style="font-size: 15px;">MSP430</a> <a href="/tags/mosquitto/" style="font-size: 15px;">mosquitto</a> <a href="/tags/OpenCL/" style="font-size: 15px;">OpenCL</a> <a href="/tags/SIMD/" style="font-size: 15px;">SIMD</a> <a href="/tags/MIC/" style="font-size: 15px;">MIC</a> <a href="/tags/Deep-learning/" style="font-size: 15px;">Deep learning</a> <a href="/tags/caffe/" style="font-size: 15px;">caffe</a> <a href="/tags/kernel%E5%BC%80%E5%8F%91/" style="font-size: 15px;">kernel开发</a> <a href="/tags/theano/" style="font-size: 15px;">theano</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">机器学习</a> <a href="/tags/openmp/" style="font-size: 15px;">openmp</a> <a href="/tags/llvm/" style="font-size: 15px;">llvm</a> <a href="/tags/LSTM/" style="font-size: 15px;">LSTM</a> <a href="/tags/SNAS/" style="font-size: 15px;">SNAS</a> <a href="/tags/pytorch/" style="font-size: 15px;">pytorch</a> <a href="/tags/yolo/" style="font-size: 15px;">yolo</a> <a href="/tags/Clion/" style="font-size: 15px;">Clion</a> <a href="/tags/ffmpeg/" style="font-size: 15px;">ffmpeg</a> <a href="/tags/Mac/" style="font-size: 15px;">Mac</a> <a href="/tags/CUDA/" style="font-size: 15px;">CUDA</a> <a href="/tags/shadowsocks/" style="font-size: 15px;">shadowsocks</a> <a href="/tags/nas/" style="font-size: 15px;">nas</a> <a href="/tags/ipython/" style="font-size: 15px;">ipython</a> <a href="/tags/gitlab/" style="font-size: 15px;">gitlab</a> <a href="/tags/vagrant/" style="font-size: 15px;">vagrant</a> <a href="/tags/archlinux/" style="font-size: 15px;">archlinux</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/08/08/confluence_synology/">使用docker部署支持备份，全docker环境的postgres+confluence环境</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/05/21/dsm7_gitlab/">在Synology DSM7.0上，找回我们熟悉的gitlab</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/23/llvm-note/">llvm编译的基本概念和流程</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/py-multi-threads/">python多线程编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/10/libtorch_cpp/">libtorch c++ api上手指南</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/05/yolo-learning2/">yolov3实战指南--训练自有数据集并完成TensorRT推理实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/19/yolo-learning/">yolov3论文详解--我们究竟在训练什么</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/17/mqtt_protobuf/">mosquitto+protobuf实战</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/12/gitlab_runner/">你好小助手，帮我买瓶酱油--gitlab-runner搭建小记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/23/ffmpeg_basic/">ffmpeg几种场景下的用法小记</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/throneclay" title="github" target="_blank">github</a><ul></ul><a href="http://zhangjikai.com/" title="zhangjikai" target="_blank">zhangjikai</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2022 <a href="/." rel="nofollow">流水的账.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
