@@ -4,5 +4,5 @@
     "appPort": 4000,
     "extensions": [
     ],
-    "postCreateCommand": "npm install; npm audit fix"
+    "postCreateCommand": "npm install"
 }
