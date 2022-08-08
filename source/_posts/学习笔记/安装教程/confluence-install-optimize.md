@@ -50,7 +50,7 @@ docker run --name confluence -d \
     cptactionhank/atlassian-confluence:latest
 ```
 
-启动起来后，按照那个博客写的进行production的激活，但这里需要说一下，jar的包对文件权限非常敏感，**必须是644的权限**！别问我是怎么知道的。
+启动起来后，按照那个博客写的进行production的激活，但这里需要说一下，jar的包对文件权限非常敏感，**必须是644的权限**！别问我是怎么知道的。这里附一个[原blog的工具](https://blog.throneclay.top/images/posts/confluence.zip)
 
 使用命令来考出考入就是这样：
 
@@ -120,4 +120,4 @@ CATALINA_OPTS="-Dconfluence.document.conversion.fontpath=/usr/share/fonts/ttf-de
 
 重启后，把chrome的历史记录都删掉，或者你什么浏览器，把历史记录都删掉再去查看就可以了。
 
-## 附运行脚本
+全部弄完后，建议用docker commit把自己的container保存出来，后面直接启动这个image就可以省略上面全部步骤直接使用了，方便备份。
